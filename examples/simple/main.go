@@ -15,6 +15,13 @@ type fooConfig struct {
 	Name string
 }
 
+func (c *fooConfig) Validate() error {
+	if c.Name == "" {
+		return fmt.Errorf("name is empty")
+	}
+	return nil
+}
+
 type foo struct {
 	deps.Implements[Foo]
 	deps.WithConfig[fooConfig]
