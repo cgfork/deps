@@ -104,7 +104,7 @@ func (r *registry) search(typ reflect.Type) ([]*Dep, bool) {
 }
 
 func Provide[Iface any, Impl any](opts ...Option) error {
-	dep, err := NewDep[Iface, Impl]()
+	dep, err := NewDep[Iface, Impl](opts...)
 	if err != nil {
 		return err
 	}

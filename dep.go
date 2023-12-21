@@ -73,3 +73,10 @@ func NewDep[Iface any, Impl any](opts ...Option) (Dep, error) {
 
 	return dep, nil
 }
+
+// WithHook sets the hook function for the Dep.
+func WithHook(hook func(impl any, caller string) any) Option {
+	return func(dep *Dep) {
+		dep.hook = hook
+	}
+}
