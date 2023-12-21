@@ -76,7 +76,7 @@ func checkRunFunc(t testing.TB, fn any) (func(context.Context, deps.Runtime) err
 		return nil, nil, fmt.Errorf("must have no return outputs")
 	}
 	if fnType.In(0) != reflect.TypeOf(t) {
-		return nil, nil, fmt.Errorf("function first argument type %v does not match first weavertest.Run argument %T", fnType.In(0), t)
+		return nil, nil, fmt.Errorf("function first argument type %v does not match first deptest.Test argument %T", fnType.In(0), t)
 	}
 	var intfs []reflect.Type
 	for i := 1; i < n; i++ {
@@ -132,7 +132,7 @@ func extractComponentInterfaceType(t reflect.Type) (reflect.Type, error) {
 	if t.Kind() != reflect.Struct {
 		return nil, fmt.Errorf("type %v is not a struct", t)
 	}
-	// See the definition of weaver.Implements.
+	// See the definition of deps.Implements.
 	f, ok := t.FieldByName("xxx_ifaceType")
 	if !ok {
 		return nil, fmt.Errorf("type %v does not embed deps.Implements", t)

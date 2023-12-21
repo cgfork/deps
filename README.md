@@ -1,6 +1,6 @@
 # deps
 
-deps is a dependency injection framework for go programs (golang). It was inspired by [Service Weaver](https://github.com/ServiceWeaver/weaver), but more simple.
+deps is a dependency injection framework for go programs (golang). It was inspired by (copied from) [Service Weaver](https://github.com/ServiceWeaver/weaver), but more simple.
 
 ## Basic Usage 
 

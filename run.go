@@ -49,7 +49,7 @@ func ValidateDeps(deps []*Dep) error {
 		intfs[reg.iface] = struct{}{}
 	}
 
-	// Check that for every runtime.Ref[T] field in an implementation
+	// Check that for every deps.Ref[T] field in an implementation
 	// struct, T is a registered interface.
 	var errs []error
 	for _, dep := range deps {
@@ -57,7 +57,7 @@ func ValidateDeps(deps []*Dep) error {
 			f := dep.impl.Field(i)
 			switch {
 			case f.Type.Implements(Type[interface{ isRef() }]()):
-				// f is a runtime.Ref[T].
+				// f is a deps.Ref[T].
 				v := f.Type.Field(0) // a Ref[T]'s value field
 				if _, ok := intfs[v.Type]; !ok {
 					// T is not a registered runtime interface.

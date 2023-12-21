@@ -12,19 +12,19 @@ type Implements[T any] struct {
 }
 
 // InstanceOf[T] is the interface implemented by a struct that embeds
-// runtime.Implements[T].
+// deps.Implements[T].
 type InstanceOf[T any] interface {
 	implements(T)
 }
 
 // implements is a method that can only be implemented inside the
-// runtime package. It exists so that a struct that embeds
+// deps package. It exists so that a struct that embeds
 // Implements[T] implements that InstanceOf[T] interface.
 // nolint
 func (Implements[T]) implements(T) {}
 
 // embeddedImplement is a method that can on be implemented inside
-// the runtime package. It used to check whether an struct embedded
+// the deps package. It used to check whether an struct embedded
 // the Implements[T] and help to get tag of the implementation.
 func (i Implements[T]) embeddedImplement() {}
 

@@ -18,7 +18,7 @@ type WithConfig[T any] struct {
 }
 
 // Config returns the configuration information for the implementation that embeds
-// this [runtime.WithConfig].
+// this [deps.WithConfig].
 //
 // Any fields in T that were not present in the application config file will
 // have their default values.
@@ -62,7 +62,7 @@ func resolveConfigAndName(v reflect.Value) (any, string) {
 	s := v.Elem()
 	t := s.Type()
 	for i := 0; i < t.NumField(); i++ {
-		// Check that f is an embedded field of type weaver.WithConfig[T].
+		// Check that f is an embedded field of type deps.WithConfig[T].
 		f := t.Field(i)
 		if !f.Anonymous ||
 			f.Type.PkgPath() != PkgPath ||
