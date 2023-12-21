@@ -1,6 +1,8 @@
 package deps
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // / Implements is a struct that can be embedded in an implementation.
 type Implements[T any] struct {
@@ -23,23 +25,40 @@ type InstanceOf[T any] interface {
 // nolint
 func (Implements[T]) implements(T) {}
 
-// embeddedImplement is a method that can on be implemented inside
-// the deps package. It used to check whether an struct embedded
-// the Implements[T] and help to get tag of the implementation.
-func (i Implements[T]) embeddedImplement() {}
-
 // setRuntime sets the runtime when the it runs it.
 func (i *Implements[T]) setRuntime(runtime Runtime) {
 	i.runtime = runtime
 }
 
-// func (i Implements[T]) GetImpl[V any]() (*V, error) {
-// 	v, err := i.runtime.GetImpl(Type[T])
-// 	if err != nil {
-// 		return nil ,err
-// 	}
-// 	return v.(*V), nil
-// }
+// getRuntime is the interface for visiting the runtime
+// stored in Implements[T].
+type getRuntime interface {
+	xxx_getRuntime() Runtime
+}
+
+// xxx_getRuntime returns the runtime.
+func (i Implements[T]) xxx_getRuntime() Runtime {
+	return i.runtime
+}
+
+// GetIntf returns the implementation of the interface T and with the specified name.
+func GetIntf[T any](gr getRuntime, name string) (T, error) {
+	var t T
+	v, err := gr.xxx_getRuntime().GetIntf(Type[T](), name)
+	if err != nil {
+		return t, err
+	}
+	return v.(T), nil
+}
+
+// GetImpl returns the object instance of the implementation T.
+func GetImpl[T any](gr getRuntime) (*T, error) {
+	v, err := gr.xxx_getRuntime().GetImpl(Type[T]())
+	if err != nil {
+		return nil, err
+	}
+	return v.(*T), nil
+}
 
 func setupImpl(impl any, runtime Runtime) error {
 	x, ok := impl.(interface{ setRuntime(Runtime) })

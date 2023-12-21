@@ -51,7 +51,7 @@ func NewDep[Iface any, Impl any](opts ...Option) (Dep, error) {
 		// name := f.Tag.Get("impl")
 		f := dep.impl.Field(i)
 		switch {
-		case f.Type.Implements(Type[interface{ embeddedImplement() }]()):
+		case f.Type.Implements(Type[getRuntime]()):
 			dep.name = f.Tag.Get("impl")
 		}
 	}

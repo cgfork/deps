@@ -67,10 +67,21 @@ func main() {
 	`
 	if err := deps.Run[app](context.Background(), deps.Config{
 		Config: config,
-	}, func(ctx context.Context, app *app) error {
+	}, func(_ context.Context, app *app) error {
 		app.foo.Get().Display()
 		app.fooA.Get().Display()
 		app.fooB.Get().Display()
+		f, err := deps.GetIntf[Foo](app, "")
+		if err != nil {
+			return err
+		}
+		f.Display()
+
+		fa, err := deps.GetImpl[fooA](app)
+		if err != nil {
+			return err
+		}
+		fa.Display()
 		return nil
 	}); err != nil {
 		panic(err)
