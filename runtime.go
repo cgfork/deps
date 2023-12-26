@@ -3,6 +3,7 @@ package deps
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"reflect"
 	"strings"
 	"sync"
@@ -24,6 +25,7 @@ type Config struct {
 	Config  string
 	Fakes   map[reflect.Type]any
 	Present map[string]any
+	Root    *slog.Logger
 }
 
 type runtime struct {
@@ -82,6 +84,10 @@ func newRuntime(ctx context.Context, deps []*Dep, config Config) (*runtime, erro
 	impls := map[string]any{}
 	for k, v := range config.Present {
 		impls[k] = v
+	}
+
+	if config.Root == nil {
+		config.Root = slog.Default()
 	}
 
 	return &runtime{
@@ -177,6 +183,8 @@ func (r *runtime) get(dep *Dep) (any, error) {
 	if err := setupConfig(dep.name, v, r.sections); err != nil {
 		return nil, err
 	}
+
+	setupLog(obj, r.config.Root)
 
 	if err := setupImpl(obj, r); err != nil {
 		return nil, err

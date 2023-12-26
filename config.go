@@ -29,9 +29,9 @@ func (wc *WithConfig[T]) Config() *T {
 	return &wc.config
 }
 
-// getConfig returns the underlying config.
+// xxx_getConfig returns the underlying config.
 // nolint
-func (wc *WithConfig[T]) getConfig() any {
+func (wc *WithConfig[T]) xxx_getConfig() any {
 	return &wc.config
 }
 
@@ -108,6 +108,22 @@ func unmarshalTOML(key, shortKey string, sections map[string]string, dst any) er
 		if err := x.Validate(); err != nil {
 			return fmt.Errorf("section %q: %w", key, err)
 		}
+	}
+	return nil
+}
+
+// HasConfig returns true if the provided implementation has an embeded
+// deps.WithConfig field.
+func HasConfig(impl any) bool {
+	_, ok := impl.(interface{ xxx_getConfig() any })
+	return ok
+}
+
+// GetConfig returns the config stored in the provided implementation, or returns
+// nil if the implementation does not have a config.
+func GetConfig(impl any) any {
+	if c, ok := impl.(interface{ xxx_getConfig() any }); ok {
+		return c.xxx_getConfig()
 	}
 	return nil
 }
