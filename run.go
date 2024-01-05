@@ -16,7 +16,7 @@ type System interface {
 type PointerToSystem[T any] interface {
 	*T
 
-	// Ensure that the T type embeds Implements[Job].
+	// Ensure that the T type embeds Implements[System].
 	InstanceOf[System]
 }
 
